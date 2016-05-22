@@ -1,0 +1,13 @@
+aeec6f2404e8a55baa469e16e292cc37 *DESCRIPTION
+0a1146d4c5142fb891c4d7ba73e134da *NAMESPACE
+65b5c5ce6ee93ee555794e686a6eb6f2 *R/expandClass.R
+63a2997d30fe0bb62ae8b599423b96ab *R/landscapeR-package.R
+7fcd612b478e5eb9c1bfc06f579220e0 *R/makeClass.R
+cbef824def4c4ecbb9da646a8d67d369 *R/makePatch.R
+eb5c42b2ad04422b9425576ec42476a5 *man/expandClass.Rd
+bb6460465d328c227bb78de39cb3c005 *man/landscapeR-package.Rd
+393ee67236bfd05353e1ad96064a1748 *man/makeClass.Rd
+dcc614a5a8cbcd22582d96f19451f329 *man/makePatch.Rd
+c071d31d8d5e9a2096bbccfe08c081a5 *vignettes/landscapeR.Rmd
+0d01b2aef703c306bb63b34d611ba8be *vignettes/landscapeR.html
+16e4eda48c2091e6641cac835ebf416f *vignettes/landscapeR.pdf
