@@ -4,17 +4,17 @@
 \alias{makeClass}
 \title{Create a class of patches.}
 \usage{
-makeClass(context, npatch, size, pts = sample.int(length(context), npatch),
-  bgr = 0, edge = FALSE, rast = TRUE, val = 1)
+makeClass(context, npatch, size, pts = NULL, bgr = 0, edge = FALSE,
+  rast = TRUE, val = 1)
 }
 \arguments{
-\item{context}{Raster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
+\item{context}{Raster object, a raster of an empty landscape or a mask, indicating where the patch cannot be generated (see \code{bgr} argument).}
 
 \item{npatch}{number of patches per class}
 
 \item{size}{integer. The size of patches, as number of raster cells. A single integer can be provided, in which case all patches will have that size.}
 
-\item{pts}{integer, the seed point locations around which the patches are built (random points are given by default)}
+\item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indeces of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
 
 \item{bgr}{integer. Value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
 

@@ -2,4 +2,6 @@
 
 export(expandClass)
 export(makeClass)
+export(makeLine)
 export(makePatch)
+export(rmSingle)

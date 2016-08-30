@@ -9,13 +9,13 @@ expandClass(context, class, size, bgr = 0, pts = NULL)
 \arguments{
 \item{context}{Raster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
 
-\item{class}{(or patch),}
+\item{class}{The raster value of class (or patch) to expand.}
 
 \item{size}{integer. Size of expansion, as number of raster cells.}
 
 \item{bgr}{integer. The background available where expansion is allowed (i.e. shrinking classes).}
 
-\item{pts}{integer, the seed point locations around which the patches are built (random points are given by default)}
+\item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indeces of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
 }
 \value{
 A RasterLayer object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.
@@ -24,7 +24,7 @@ A RasterLayer object. If \code{rast=FALSE} returns a list of vectors, each conta
 Expand an existing class of patches.
 }
 \examples{
-require(raster)
+library(raster)
 
 m = matrix(0, 33, 33)
 r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)

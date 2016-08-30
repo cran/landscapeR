@@ -2,12 +2,12 @@
 #
 #' @inheritParams makePatch
 #' @inheritParams makeClass
-#' @param class (or patch),
+#' @param class The raster value of class (or patch) to expand.
 #' @param size integer. Size of expansion, as number of raster cells.
 #' @param bgr integer. The background available where expansion is allowed (i.e. shrinking classes).
 #' @return A RasterLayer object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.
 #' @examples
-#' require(raster)
+#' library(raster)
 #'
 #' m = matrix(0, 33, 33)
 #' r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
@@ -26,52 +26,67 @@
 #' plot(rr)
 #' @export
 expandClass <- function(context, class, size, bgr=0, pts = NULL) {
+  if(length(class) > 1){ stop('A single value only is admitted for "class" argument.') }
+  if(any(class %in% bgr)){ warning('Value to attribute to patches same as background cells value (arg. "class" equals "bgr").') }
+  if(any(is.na(size) | size <=0)){ stop('Invalid "size" argument provided.') }
   bd <- raster::boundaries(context, type='outer', classes=TRUE, directions=8)
   bd <- t(raster::as.matrix(bd))
-  if(!is.matrix(context)) {m <- t(raster::as.matrix(context))} else {m <- context}
-  if(is.null(pts)){edg <- which(bd==1 & m==class)} else {edg <- pts}
-  bgr <- which(.is.elem(m, bgr))
-  if(length(bgr) == 0){stop('No cells available, landscape full')}
-  if(size > (length(bgr))){stop('Expansion size bigger than available landscape')}
+  if(!is.matrix(context)) {
+    mtx <- t(raster::as.matrix(context))
+  } else {
+    mtx <- context
+  }
+  if(is.null(pts)){
+    edg <- which(bd==1 & mtx==class)
+  } else {
+    edg <- pts
+  }
+
+  if(length(bgr) > 1){
+    p_bgr <- which(is.element(mtx, bgr[-1]))
+    vals <- mtx[p_bgr]
+    bgr <- bgr[1]
+    bgrCells <- c(which(mtx == bgr), p_bgr)
+    mtx[p_bgr] <- bgr
+  } else {
+    bgrCells <- which(mtx == bgr)
+  }
+  if(length(bgrCells) == 0){stop('No cells available, landscape full')}
+  if(size > (length(bgrCells))){stop('Expansion size bigger than available landscape')}
   pts <- ifelse(length(edg) == 1, edg, sample(edg, 1) )
-  cg <- pts
-  dim1 <- dim(m)[1]
-  dim2 <- dim(m)[2]
-  while(length(cg) < size){
-    if(pts %% dim1 == 0){
-      rr <- dim1
-      cc <- pts/dim1
-    } else {
-      cc <- trunc(pts/dim1) + 1
-      rr <- pts - (cc-1) * dim1
-    }
-    ad <- c(rr-1, rr+1, rr, rr, cc, cc, cc-1, cc+1)
-    ad[ad <= 0 | c(ad[1:4] > dim1, ad[5:8] > dim2)] <- NA
-    ad <- ad[1:4] + (ad[5:8]-1)*dim1
+  dim1 <- dim(mtx)[1]
+  dim2 <- dim(mtx)[2]
+  cg <- 1
+  while(cg < size){
+    ad <- .contigCells(pts, dim1, dim2)
+    ## The following stands for {ad <- bgrCells[which(bgrCells %in% ad)]}
+    ad <- ad[.subset(mtx, ad) == bgr] # ad[mtx[ad] == bgr]
     ad <- ad[!is.na(ad)]
-    ad <- ad[which(!.is.elem(ad, c(cg, edg)))]
-    ## The following stands for {ad <- bgr[which(bgr %in% ad)]}
-    ##d <- vapply(ad, function(x) .fastSearch(as.numeric(bgr), x, "=="), 1); ad <- bgr[d]
-    d <- fastmatch::fmatch(ad, bgr, nomatch = 0)
-    ad <- bgr[d]
     if(length(ad) == 0) {
-      edg <- edg[edg!=pts]
+      edg <- edg[edg != pts]
       if(length(edg) <= 1) {
-        if(length(cg) == 1){
-          warning('Expanding classes do not touch shrinking classes. Input raster returned')
+        if(cg == 1){
+          warning('Expanding classes do not touch shrinking classes. Input raster returned.')
           break
         } else {
-          warning('Maximum patch size reached: ', length(cg))
+          warning('Maximum patch size reached: ', cg)
           break
         }
       }
       pts <- sample(edg, 1)
       next
     }
-    cg <- c(cg, ad)
-    edg <- c(edg[which(edg != pts)], ad)
+    mtx[ad] <- class
+    cg <- cg + length(ad)
+    edg <- c(edg[edg != pts], ad)
     pts <- ifelse(length(edg) == 1, edg, sample(edg, 1) )
   }
-  context[cg] <- class
+  if(exists('p_bgr')){
+#    id <- mtx[p_bgr] != class
+    id <- .subset(mtx, p_bgr) != class
+#    mtx[p_bgr[id]] <- vals[id]
+    mtx[.subset(p_bgr, id)] <- .subset(vals, id)
+  }
+  context[] <- t(mtx)
   return(context)
 }
