@@ -17,7 +17,7 @@
 #' library(raster)
 #' r <- matrix(0,33,33)
 #' r <- raster(r, xmn=0, xmx=10, ymn=0, ymx=10)
-#' plot(makeLine(r, size=1000, rast=TRUE))
+#' plot(makeLine(r, size=500, rast=TRUE))
 #' @export
 makeLine <- function(context, size, direction=NULL, convol=0.5, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, val=1) {
   if(!is.matrix(context)) {

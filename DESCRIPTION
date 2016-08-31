@@ -1,7 +1,7 @@
 Package: landscapeR
 Title: Categorical Landscape Simulation Facilities
-Version: 1.1
-Date: 2016-08-30
+Version: 1.1.1
+Date: 2016-08-31
 Authors@R: c(person(given = "Dario", family = "Masante", role = c("aut", "cre"), email = "dmasan@ceh.ac.uk"))
 Copyright: Natural Environment Research Council (NERC) and Centre for
         Ecology and Hydrology (CEH)
@@ -16,8 +16,8 @@ LazyData: TRUE
 NeedsCompilation: no
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
-Packaged: 2016-08-30 14:39:43 UTC; dmasan
+Packaged: 2016-08-31 11:57:20 UTC; dmasan
 Author: Dario Masante [aut, cre]
 Maintainer: Dario Masante <dmasan@ceh.ac.uk>
 Repository: CRAN
-Date/Publication: 2016-08-30 18:47:56
+Date/Publication: 2016-08-31 14:55:47

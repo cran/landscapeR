@@ -24,7 +24,7 @@ library(raster)
 m = matrix(0, 33, 33)
 r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 patchSize = 500
-r = makePatch(r, 578, patchSize, rast=TRUE)
+r = makePatch(r, patchSize, spt=578, rast=TRUE)
 plot(r)
 
 ## Introduce a single tone cell and remove it with rmSingle

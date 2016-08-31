@@ -27,7 +27,7 @@
 #' @export
 expandClass <- function(context, class, size, bgr=0, pts = NULL) {
   if(length(class) > 1){ stop('A single value only is admitted for "class" argument.') }
-  if(any(class %in% bgr)){ warning('Value to attribute to patches same as background cells value (arg. "class" equals "bgr").') }
+  if(class %in% bgr){ warning('Value to attribute to patches same as background cells value (arg. "class" equals "bgr").') }
   if(any(is.na(size) | size <=0)){ stop('Invalid "size" argument provided.') }
   bd <- raster::boundaries(context, type='outer', classes=TRUE, directions=8)
   bd <- t(raster::as.matrix(bd))

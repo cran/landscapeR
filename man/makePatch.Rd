@@ -33,6 +33,7 @@ Create a single patch. Note that function \code{makeClass} should be used prefer
 The patch is created starting from the seed point and iteratively sampling randomly neighbouring cells at the edge of the patch.
 There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
 Note that \code{makeClass} should be used preferably when creating a single patch, as better error and exception handling is provided for there.
+Also, argument \code{bgr} accepts a single value only, unlike \code{makeClass} that accept multiple.
 }
 \examples{
 library(raster)

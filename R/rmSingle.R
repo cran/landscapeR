@@ -11,7 +11,7 @@
 #' m = matrix(0, 33, 33)
 #' r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 #' patchSize = 500
-#' r = makePatch(r, 578, patchSize, rast=TRUE)
+#' r = makePatch(r, patchSize, spt=578, rast=TRUE)
 #' plot(r)
 #'
 #' ## Introduce a single tone cell and remove it with rmSingle
@@ -21,13 +21,14 @@
 #' ## Single tones can be identified but not removed:
 #' rmSingle(r, rm = FALSE)
 #'	@export
+#'
 rmSingle <- function(rst, rm = TRUE){
   dim1 <- dim(rst)[1]
   dim2 <- dim(rst)[2]
   singles <- vector()
   v <- vval <- raster::getValues(rst)
   v <- which(!is.na(v))
-  for (pt in v){  ## TODO: VECTORIZE
+  for (pt in v){  ## Faster than sapply or vapply!
     if(pt %% dim2 == 0){
       cc <- dim2
       rr <- pt / dim2
@@ -54,46 +55,3 @@ rmSingle <- function(rst, rm = TRUE){
     return(singles)
   }
 }
-
-# .rmSingle <- function(rst, rm = TRUE){
-#   dim1 <- dim(rst)[1]
-#   dim2 <- dim(rst)[2]
-#   v <- vval <- raster::getValues(rst)
-#   v <- which(!is.na(v))
-#   singles <- sapply(v, function(x){
-#     if(x %% dim2 == 0){
-#       cc <- dim2
-#       rr <- x / dim2
-#     } else {
-#       rr <- trunc(x / dim2) + 1
-#       cc <- x - (rr-1) * dim2
-#     }
-#     ad <- c(rr-1,rr+1,rr,rr,cc,cc,cc-1,cc+1)
-#     ad[ad	 <= 0 | c(ad[1:4] > dim1, ad[5:8] > dim2)] <- NA
-#     ad <- ad[5:8] + (ad[1:4]-1)*dim2
-#     ad <- ad[!is.na(ad)]
-#     if(all(vval[ad] != vval[x])){
-#       if(rm == TRUE){
-#         vval[x] <- sample(vval[ad], 1)
-#         x <- sample(vval[ad], 1)
-#
-#       } else {
-#         x
-#       }
-#     }
-#   })
-#   if(rm == TRUE){
-#     rst[] <- vval
-#     return(rst)
-#   } else {
-#     return(singles)
-#   }
-# }
-#
-# sapply(a, function(x, y){f(x, y)})
-# f <- function(x, y){
-#   nmx <- deparse(substitute(vval))
-#   vval[x] <- sample(vval[y], 1)
-#   assign(nmx, vval, pos=parent.frame())
-# }
-

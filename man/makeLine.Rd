@@ -46,6 +46,6 @@ as convolution increases.
 library(raster)
 r <- matrix(0,33,33)
 r <- raster(r, xmn=0, xmx=10, ymn=0, ymx=10)
-plot(makeLine(r, size=1000, rast=TRUE))
+plot(makeLine(r, size=500, rast=TRUE))
 }
 

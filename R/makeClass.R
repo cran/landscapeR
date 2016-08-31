@@ -50,7 +50,7 @@ makeClass <- function(context, npatch, size, pts = NULL, bgr=0, edge=FALSE, rast
     size <- rep(size, npatch)
   }
   if(length(bgr > 1)){
-    bgrCells <- which(mtx %in% bgr)
+    bgrCells <- which(is.element(mtx, bgr))
     bgr <- bgr[1]
     mtx[bgrCells] <- bgr
   }
