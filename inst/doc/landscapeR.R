@@ -76,8 +76,16 @@ plot(rr)
 ## ------------------------------------------------------------------------
 m[] <- 0
 r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
-rr <- makeLine(r, size=50, val=2, convol=0.05, spt=545, rast=TRUE)
+rr <- makeLine(r, size=50, spt = 545, direction=45, convol=0.05, val=2, rast=TRUE)
 plot(rr)
+
+## ---- fig.width=4, fig.height=4------------------------------------------
+rr <- matrix(0,100,100)
+rr <- raster(rr, xmn=0, xmx=10, ymn=0, ymx=10)
+for(i in c(550, 3050, 5050, 7550)){
+  rr = makeLine(rr, size=50, rast=TRUE, spt=i, direction=135, convol=0.25) 
+}
+plot(expandClass(rr, 1, 250))
 
 ## ---- fig.width=6, warning=FALSE-----------------------------------------
 rr <- makeClass(r, 10, 100)

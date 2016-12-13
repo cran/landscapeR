@@ -15,7 +15,7 @@ expandClass(context, class, size, bgr = 0, pts = NULL)
 
 \item{bgr}{integer. The background available where expansion is allowed (i.e. shrinking classes).}
 
-\item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indeces of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
+\item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indexes of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
 }
 \value{
 A RasterLayer object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.

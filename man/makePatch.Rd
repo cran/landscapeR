@@ -14,7 +14,7 @@ makePatch(context, size, spt = NULL, bgr = 0, edge = FALSE,
 
 \item{spt}{integer or matrix. The seed point location around which the patch is generated (a random point is given by default). It can be an integer, as index of the cell in the raster, or a two columns matrix indicating x and y coordinates (an integer vector of length 2 is accepted too).}
 
-\item{bgr}{integer. Value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
+\item{bgr}{integer. A single value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
 
 \item{edge}{logical. Should the vector of edge cells of the patch be returned?}
 
@@ -30,9 +30,9 @@ list of two vectors is returned: one for the inner raster cells and the second f
 Function will create a single patch. \strong{NOTE}: \code{makeClass} should be used preferably when creating a single patch, as better error and exception handling is provided.
 }
 \details{
-The patch is created starting from the seed point and iteratively sampling randomly neighbouring cells at the edge of the patch.
+The patch is created starting from the seed point and iteratively sampling randomly neighbouring cells at the edge of the patch, according to von Neumann neighbourhood (four cells, aka Rook case).
 There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
-Also, argument \code{bgr} accepts a single value only, unlike \code{makeClass} that accept multiple.
+Argument \code{bgr} accepts a single value only, unlike \code{makeClass} that accepts multiple and should therefore preferred.
 }
 \examples{
 library(raster)

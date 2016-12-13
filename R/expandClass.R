@@ -61,7 +61,7 @@ expandClass <- function(context, class, size, bgr=0, pts = NULL) {
     ad <- .contigCells(pts, dim1, dim2)
     ## The following stands for {ad <- bgrCells[which(bgrCells %in% ad)]}
     ad <- ad[.subset(mtx, ad) == bgr] # ad[mtx[ad] == bgr]
-    ad <- ad[!is.na(ad)]
+    ad <- ad[is.finite(ad)]
     if(length(ad) == 0) {
       edg <- edg[edg != pts]
       if(length(edg) <= 1) {

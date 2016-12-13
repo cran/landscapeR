@@ -9,10 +9,11 @@ rmSingle(rst, rm = TRUE)
 \arguments{
 \item{rst}{input raster landscape.}
 
-\item{rm}{logical, if TRUE returns the raster without single tones cells, if FALSE a vector of numbers identifying the single tones cells.}
+\item{rm}{logical, if TRUE returns the raster without single tones cells, if FALSE a vector of numbers identifying the index of single tones cells.}
 }
 \value{
-a raster without single tones cells. If \code{rm=TRUE}, a vector of numbers identifying the single tones cells.
+A raster without single tones cells. If \code{rm=FALSE}, it returns a vector of numbers identifying the index of single tones cells.
+The value assigned to single tone cells is picked from one of the four neighbouring cells, selected at random.
 }
 \description{
 Patch creation algorithm can occasionally leave single cells scattered within patches.
@@ -24,11 +25,13 @@ library(raster)
 m = matrix(0, 33, 33)
 r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 patchSize = 500
+
+## Make a patch and introduce a single tone cell
 r = makePatch(r, patchSize, spt=578, rast=TRUE)
+r[578] = 0
 plot(r)
 
-## Introduce a single tone cell and remove it with rmSingle
-r[578] = 0
+## Now remove it
 plot( rmSingle(r) )
 
 ## Single tones can be identified but not removed:

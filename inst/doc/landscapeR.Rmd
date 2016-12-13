@@ -25,12 +25,11 @@ r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 ```
 
 ### `makePatch`
-This is the basic function to create a single patch. By default, `makePatch` returns a vector of cell indexes, so argument `rast=TRUE` must be specified to plot a map.
+This is the basic function to create a single patch. However, `makeClass` should be preferred, even when creating a single patch (see below). By default, `makePatch` returns a vector of cell indexes, so to plot a map argument `rast=TRUE`. More features can be specified about the patch, but `makeClass` provide better exception/error handling.
 ```{r, eval=FALSE}
 rr <- makePatch(r, size=500, rast=TRUE)
 plot(rr)
 ```
-More features can be specified about the patch. However, `makeClass` should be preferred, even when creating a single patch (see below). 
 
 ### `makeClass`
 `makeClass` generates a group of patches, as specified by arguments. Example:
@@ -124,8 +123,18 @@ Creates a linear feature, at a given convolution level and direction in degrees 
 ```{r}
 m[] <- 0
 r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
-rr <- makeLine(r, size=50, val=2, convol=0.05, spt=545, rast=TRUE)
+rr <- makeLine(r, size=50, spt = 545, direction=45, convol=0.05, val=2, rast=TRUE)
 plot(rr)
+```
+
+In combination with `expandClass` anisotropic features or landscapes can be created:
+```{r, fig.width=4, fig.height=4}
+rr <- matrix(0,100,100)
+rr <- raster(rr, xmn=0, xmx=10, ymn=0, ymx=10)
+for(i in c(550, 3050, 5050, 7550)){
+  rr = makeLine(rr, size=50, rast=TRUE, spt=i, direction=135, convol=0.25) 
+}
+plot(expandClass(rr, 1, 250))
 ```
 
 ### `rmSingle`
@@ -137,5 +146,4 @@ plot(rr)
 rs <- rmSingle(rr)
 plot(rs)
 ```
-
 

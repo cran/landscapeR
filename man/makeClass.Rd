@@ -14,9 +14,9 @@ makeClass(context, npatch, size, pts = NULL, bgr = 0, edge = FALSE,
 
 \item{size}{integer. The size of patches, as number of raster cells. A single integer can be provided, in which case all patches will have that size.}
 
-\item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indeces of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
+\item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indexes of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
 
-\item{bgr}{integer. Value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
+\item{bgr}{integer. A single value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
 
 \item{edge}{logical. Should the vector of edge cells of the patch be returned?}
 
@@ -25,14 +25,15 @@ makeClass(context, npatch, size, pts = NULL, bgr = 0, edge = FALSE,
 \item{val}{integer. The value to be assigned to patch cells, when \code{rast=TRUE}}
 }
 \value{
-A vector of matrix cell numbers, or an raster object if \code{rast=TRUE}.
+A RasterLayer object, or a vector of cell numbers  if \code{rast=FALSE}.
 }
 \description{
 Create a class of patches.
 }
 \details{
 The patches created can be contiguous, therefore resembling a single patch with size
-equal to the sum of contiguous cells.
+equal to the sum of contiguous cells. The patches are created starting from the seed points (if provided) and iteratively sampling randomly neighbouring cells at the edge of the patch, according to von Neumann neighbourhood (four cells, aka Rook case).
+There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
 }
 \examples{
 library(raster)

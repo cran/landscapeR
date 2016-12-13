@@ -2,7 +2,7 @@
 % Please edit documentation in R/makeLine.R
 \name{makeLine}
 \alias{makeLine}
-\title{Create a linear patch}
+\title{Create a linear patch (beta version).}
 \usage{
 makeLine(context, size, direction = NULL, convol = 0.5, spt = NULL,
   bgr = 0, edge = FALSE, rast = FALSE, val = 1)
@@ -19,7 +19,7 @@ between 0 and 1, where 0 is no convolution at all (basically a straight line) an
 
 \item{spt}{integer or matrix. The seed point location around which the patch is generated (a random point is given by default). It can be an integer, as index of the cell in the raster, or a two columns matrix indicating x and y coordinates (an integer vector of length 2 is accepted too).}
 
-\item{bgr}{integer. Value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
+\item{bgr}{integer. A single value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.}
 
 \item{edge}{logical. Should the vector of edge cells of the patch be returned?}
 
@@ -46,6 +46,7 @@ as convolution increases.
 library(raster)
 r <- matrix(0,33,33)
 r <- raster(r, xmn=0, xmx=10, ymn=0, ymx=10)
-plot(makeLine(r, size=500, rast=TRUE))
+plot(makeLine(r, size=50, spt = 545, direction=45, convol=0.05, rast=TRUE))
+
 }
 

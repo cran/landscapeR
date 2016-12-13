@@ -4,10 +4,11 @@
 #' @param context Raster object, a raster of an empty landscape or a mask, indicating where the patch cannot be generated (see \code{bgr} argument).
 #' @param npatch number of patches per class
 #' @param size integer. The size of patches, as number of raster cells. A single integer can be provided, in which case all patches will have that size.
-#' @param pts integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indeces of the cells in the raster, or a two columns matrix indicating x and y coordinates.
-#' @return A vector of matrix cell numbers, or an raster object if \code{rast=TRUE}.
+#' @param pts integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indexes of the cells in the raster, or a two columns matrix indicating x and y coordinates.
+#' @return A RasterLayer object, or a vector of cell numbers  if \code{rast=FALSE}.
 #' @details The patches created can be contiguous, therefore resembling a single patch with size
-#' equal to the sum of contiguous cells.
+#' equal to the sum of contiguous cells. The patches are created starting from the seed points (if provided) and iteratively sampling randomly neighbouring cells at the edge of the patch, according to von Neumann neighbourhood (four cells, aka Rook case).
+#' There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
 #' @examples
 #' library(raster)
 #'
