@@ -1,8 +1,15 @@
+landscapeR v1.2 (Release date: 2017-07-05)
+-----------------------------------------------
+CHANGES:
+
+* Hidden internal functions translated to C++ for significant speed inprovements
+
+
 landscapeR v1.1.3 (Patch release date: 2016-12-13)
 -----------------------------------------------
 CHANGES:
 
-* New mantainer's email address in the DESCRIPTION file
+* New mantainers's email address in the DESCRIPTION file
 * Minor documentation edits in all functions
 * Slight speed improvements with performant native R functions
 

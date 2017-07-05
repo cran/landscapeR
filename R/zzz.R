@@ -4,3 +4,7 @@
                               'License: GPL v3. Centre for Ecology and Hydrology and NERC (UK)\n', domain=NA, appendLF=TRUE)
     }
 }
+
+.onUnload <- function (libpath) {
+  library.dynam.unload("landscapeR", libpath)
+}

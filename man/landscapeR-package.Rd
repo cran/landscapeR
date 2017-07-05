@@ -2,8 +2,8 @@
 % Please edit documentation in R/landscapeR-package.R
 \docType{package}
 \name{landscapeR-package}
-\alias{landscapeR}
 \alias{landscapeR-package}
+\alias{landscapeR}
 \title{landscapeR: A landscape simulator for R.}
 \description{
 This package is aimed at simulating categorical landscapes on actual geographical realms,
@@ -28,7 +28,7 @@ Also: \url{https://github.com/dariomasante/landscapeR}
 \item{\code{\link{rmSingle}} removes single tones from patches and background.}
 }
 }
-\author{
-Dario Masante \email{dmasan@ceh.ac.uk}
-}
 
+\author{
+Dario Masante
+}

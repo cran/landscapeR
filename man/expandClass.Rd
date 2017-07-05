@@ -42,4 +42,3 @@ plot(r)
 rr = expandClass(r, 1, 100)
 plot(rr)
 }
-

@@ -50,14 +50,14 @@ plot(rr)
 rr <- makeClass(rr, 1, 100, bgr=class, val=1)
 plot(rr, axes=FALSE)
 
-## ---- fig.width=6--------------------------------------------------------
+## ---- fig.width=6, warning=FALSE-----------------------------------------
 rr <- makeClass(r, 1, patchSize, centre)
 par(mfrow=c(1,2))
 plot(rr)
 rex <- expandClass(rr, 1, size=250)
 plot(rex)
 
-## ---- fig.width=6--------------------------------------------------------
+## ---- fig.width=6, warning=FALSE-----------------------------------------
 rr <- makeClass(r, 5, 100)
 rr <- makeClass(rr, 5, 50, val=2) ## Creates a second class in the landscape with value 2
 par(mfrow=c(1,2))
@@ -65,7 +65,7 @@ plot(rr)
 rex <- expandClass(rr, 2, 250, bgr = c(0,1))
 plot(rex)
 
-## ---- fig.width=6--------------------------------------------------------
+## ---- fig.width=6, warning=FALSE-----------------------------------------
 m[,17] <- 1
 r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 par(mfrow=c(1,2))
@@ -73,13 +73,13 @@ plot(r)
 rr <- expandClass(r, 1, 200)
 plot(rr)
 
-## ------------------------------------------------------------------------
+## ---- warning=FALSE------------------------------------------------------
 m[] <- 0
 r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 rr <- makeLine(r, size=50, spt = 545, direction=45, convol=0.05, val=2, rast=TRUE)
 plot(rr)
 
-## ---- fig.width=4, fig.height=4------------------------------------------
+## ---- fig.width=4, fig.height=4, warning=FALSE---------------------------
 rr <- matrix(0,100,100)
 rr <- raster(rr, xmn=0, xmx=10, ymn=0, ymx=10)
 for(i in c(550, 3050, 5050, 7550)){

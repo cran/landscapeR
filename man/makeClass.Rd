@@ -51,4 +51,3 @@ pts = c(1, 33, 1089)
 rr = makeClass(r, 3, size, pts)
 plot(rr)
 }
-

@@ -46,10 +46,10 @@ makeClass <- function(context, npatch, size, pts = NULL, bgr=0, edge=FALSE, rast
   }
   if(length(bgr > 1)){
     bgr <- bgr[1]
-    mtx[bgrCells] <- bgr
+    .assignValues(bgr, bgrCells, mtx) #mtx[bgrCells] <- bgr
   }
   if(is.null(pts)){
-    pts <- sample(bgrCells, npatch)
+    pts <- sample(bgrCells, npatch) # bgrCells[.Internal(sample(length(bgrCells), npatch, FALSE, NULL))] #
   }
   pts <- .toCellIndex(context, pts)
   ## invalidPts <- which(pts > length(mtx) | pts < 1 | pts %% 1 != 0 | is.na(pts))
@@ -76,7 +76,7 @@ makeClass <- function(context, npatch, size, pts = NULL, bgr=0, edge=FALSE, rast
     } else {
       lst[[np]] <- l
     }
-    mtx[l] <- val
+    .assignValues(val, l, mtx) #mtx[l] <- val
   }
   if(rast == TRUE) {
     context[unlist(lst)] <- val

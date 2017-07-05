@@ -8,6 +8,9 @@
 #' implemented uses a simple agent style/cellular automata growth model, with no rules
 #' (apart from areas of exclusion). Outputs are raster dataset exportable to any common GIS format.
 #'
+#' @useDynLib landscapeR
+#' @importFrom Rcpp sourceCpp
+#'
 #' @section landscapeR functions:
 #' \itemize{
 #' \item{\code{\link{makePatch}} creates a single patch in the landscape.}
@@ -21,5 +24,5 @@
 #' @docType package
 #' @name landscapeR-package
 #' @aliases landscapeR
-#' @author Dario Masante \email{dmasan@ceh.ac.uk}
+#' @author Dario Masante
 NULL

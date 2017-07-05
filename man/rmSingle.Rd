@@ -37,4 +37,3 @@ plot( rmSingle(r) )
 ## Single tones can be identified but not removed:
 rmSingle(r, rm = FALSE)
 }
-

@@ -55,47 +55,57 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
   if(size > length(bgrCells)){
     warning('Patch size bigger than available background.')
   }
-  spt <- ifelse(is.null(spt), sample(bgrCells, 1), spt)
+  if(is.null(spt)){
+    spt <- sample(bgrCells, 1)
+  }
   if(spt > length(context) | spt < 1 | spt %% 1 != 0){
     stop('Seed point not valid. Must be an integer between 1 and the total number of cells of "context".')
   }
   if(.subset(mtx, spt) != bgr){ #mtx[spt] != bgr
     wp <- spt
-    spt <- ifelse(length(bgrCells) > 1, sample(bgrCells, 1), bgrCells)
+    if(length(bgrCells) > 1){
+      spt <- sample(bgrCells, 1)# bgrCells[.Internal(sample(length(bgrCells), 1L, FALSE, NULL))] #
+    } else {
+      spt <- bgrCells
+    }
     if(warningSwitch){
       warning('Seed point  ', wp, '  outside background. Re-sampled randomly inside it. New seed:  ', spt)
     }
   }
-  mtx[spt] <- val
+  .assignValues(val, spt, mtx) #mtx[spt] <- val
   edg <- spt
-  dim1 <- dim(mtx)[1]
-  dim2 <- dim(mtx)[2]
   cg = 1
   while(cg < size){
-    ad <- .contigCells(spt, dim1, dim2)
-    ## The following stands for {ad <- bgrCells[which(bgrCells %in% ad)]}. It was {d <- fastmatch::fmatch(ad, bgrCells, nomatch = 0);ad <- bgrCells[d]}
-    ad <- ad[.subset(mtx, ad) == bgr] #ad[mtx[ad] == bgr]
-    ad <- ad[is.finite(ad)]
+    ad <- .contigCells(spt, bgr, mtx)
     if(length(ad) == 0) {
       edg <- edg[edg != spt]
       if(length(edg) <= 1) {
         warning('Patch size reached from seed point ', spt, ' was ', cg, ' . No further background cells available for the patch.')
         break
       }
-      spt <- sample(edg, 1)
+      spt <- sample(edg, 1) # edg[.Internal(sample(length(edg), 1L, FALSE, NULL))] #
     } else {
-      mtx[ad] <- val
+      .assignValues(val, ad, mtx) #mtx[ad] <- val
       edg <- c(edg[edg != spt], ad)
       cg <- cg + length(ad)
-      spt <- ifelse(length(edg) == 1, edg, sample(edg, 1) )
+      if(length(edg) == 1){
+        spt <- edg
+      } else {
+        spt <- sample(edg, 1) # edg[.Internal(sample(length(edg), 1L, FALSE, NULL))] #
+      }
     }
+    #Rcpp::checkUserInterrupt()
   }
   if(rast == TRUE) {
     context[] <- t(mtx)
     return(context)
   } else if (edge == TRUE) {
-    edgVal <- ifelse(val+1 == bgr, val+2, val+1)
-    mtx[edg] <- edgVal
+    if(val+1 == bgr){
+      edgVal <- val+2
+    } else {
+      edgVal <- val+1
+    }
+    .assignValues(edgVal, edg, mtx) #mtx[edg] <- edgVal
     edg <- which(mtx == edgVal)
     idx <- which(mtx == val)
     return(list(inner = idx, edge = edg))
@@ -115,35 +125,3 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
   }
 }
 
-
-## Find contiguous cells (rook case, 4 directions)
-.contigCells <- function(pt, dim1, dim2){
-  if(pt %% dim1 == 0){
-    rr <- dim1
-    cc <- pt / dim1
-  } else {
-    cc <- trunc(pt / dim1) + 1
-    rr <- pt - (cc-1) * dim1
-  }
-  ad <- c(rr-1, rr+1, rr, rr, cc, cc, cc-1, cc+1)
-  #ad[ad <= 0 | c(ad[1:4] > dim1, ad[5:8] > dim2)] <- NA
-  ad[ad <= 0 | c(.subset(ad, 1:4) > dim1, .subset(ad, 5:8) > dim2)] <- NA
-  #ad <- ad[1:4] + (ad[5:8]-1) * dim1
-  ad <- .subset(ad, 1:4) + (.subset(ad, 5:8) - 1) * dim1
-}
-
-## Converts matrix indexes into indexes suitable for the transposed matrix (NOT USED)
-.indexTranspose <- function(mtx, id){
-  dim1 <- dim(mtx)[1]
-  dim2 <- dim(mtx)[2]
-  sapply(id, function(x){
-    if(x %% dim1 == 0){
-      rr <- dim1
-      cc <- x / dim1
-    } else {
-      cc <- trunc(x / dim1) + 1
-      rr <- x - (cc - 1) * dim1
-    }
-    cc + (rr-1) * dim2
-  })
-}

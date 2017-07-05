@@ -13,7 +13,8 @@ vignette: |
 ---
 
 This document describes the package "landscapeR". This package is aimed at simulating categorical landscapes on actual geographical realms, starting from either empty landscapes or landscapes provided by the user (e.g. land use maps). The purpose is to provide a tool to tweak or create the landscape while retaining a high degree of control on its features, without the hassle of specifying each location attribute. In this it differs from other tools which generate null or neutral landscape in a theorethical space. 
-Input and outputs are raster datasets or vectors (indicating cell indexes). Cell indexes range from 1 to the number of cells composing the raster (i.e. number of columns times number of rows) and are assigned from left to right and top to bottom. In landscapeR, areas are measured by number of raster cells, rather than actual areas. Therefore, areas (and dimensions) of cells within a raster are always treated as equal, as the package is conceived to work on landscapes from fine to mid scale, where differences in cell areas due to latitude are relatively small. This may be an issue when working with non projected data at very wide scale (e.g. from subcontinental to global). All basic GIS operations are handled by the [`raster`](https://cran.r-project.org/package=raster) package. 
+Input and outputs are raster datasets or R integer vectors indicating the raster cell indexes. Cell indexes always range from 1 to the number of cells composing the raster including missing values (i.e. the number of columns times number of rows) and are assigned from left to right and top to bottom. 
+In landscapeR, areas are measured by number of raster cells, rather than actual areas. Therefore, areas (and dimensions) of cells within a raster are always treated as equal, as the package is conceived to work on landscapes from fine to mid scale, where differences in cell areas due to latitude are relatively small. This may be an issue when working with non projected data at very wide scale (e.g. from subcontinental to global). All basic GIS operations are handled by the [`raster`](https://cran.r-project.org/package=raster) package. 
 
 Below it follows a set of examples, using landscapeR functions to generate various landscape configurations. Let's start loading the required packages and making an empty landscape (by transforming a matrix into a raster a geographical object of class RasterLayer):
 
@@ -48,7 +49,7 @@ rr <- makeClass(r, num, size)
 plot(rr)
 ```
 
-Each patch size and seed starting position can be specified as well:
+Each patch size and seed starting position (by cell index, left to right, top to bottom) can be specified as well:
 ```{r}
 num <- 5
 size <- c(1,5,10,20,50)
@@ -90,7 +91,7 @@ plot(rr, axes=FALSE)
 
 ### `expandClass`
 Expands (and shrinks) classes starting from an existing landscape. Below, in the right plot, class 1 is expanded by 250 cells:
-```{r, fig.width=6}
+```{r, fig.width=6, warning=FALSE}
 rr <- makeClass(r, 1, patchSize, centre)
 par(mfrow=c(1,2))
 plot(rr)
@@ -99,7 +100,7 @@ plot(rex)
 ```
 
 Multiple background values are allowed, when the class has to expand over two or more existing classes:
-```{r, fig.width=6}
+```{r, fig.width=6, warning=FALSE}
 rr <- makeClass(r, 5, 100)
 rr <- makeClass(rr, 5, 50, val=2) ## Creates a second class in the landscape with value 2
 par(mfrow=c(1,2))
@@ -109,7 +110,7 @@ plot(rex)
 ```
 
 This function can be used to mimic shapes, by providing a skeleton:
-```{r, fig.width=6}
+```{r, fig.width=6, warning=FALSE}
 m[,17] <- 1
 r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 par(mfrow=c(1,2))
@@ -120,7 +121,7 @@ plot(rr)
 
 ### `makeLine`
 Creates a linear feature, at a given convolution level and direction in degrees (zero is North)
-```{r}
+```{r, warning=FALSE}
 m[] <- 0
 r <- raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
 rr <- makeLine(r, size=50, spt = 545, direction=45, convol=0.05, val=2, rast=TRUE)
@@ -128,7 +129,7 @@ plot(rr)
 ```
 
 In combination with `expandClass` anisotropic features or landscapes can be created:
-```{r, fig.width=4, fig.height=4}
+```{r, fig.width=4, fig.height=4, warning=FALSE}
 rr <- matrix(0,100,100)
 rr <- raster(rr, xmn=0, xmx=10, ymn=0, ymx=10)
 for(i in c(550, 3050, 5050, 7550)){

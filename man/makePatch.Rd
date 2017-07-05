@@ -55,4 +55,3 @@ plot(r)
 rr = makePatch(r, 100, bgr=newVal, rast=TRUE, val=10)
 plot(rr)
 }
-
