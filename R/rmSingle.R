@@ -8,9 +8,10 @@
 #' @return A raster without single tones cells. If \code{rm=FALSE}, it returns a vector of numbers identifying the index of single tones cells.
 #' The value assigned to single tone cells is picked from one of the four neighbouring cells, selected at random.
 #' @examples
-#' library(raster)
+#' library(terra)
 #' m = matrix(0, 33, 33)
-#' r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+#' r = rast(m)
+#' ext(r) = c(0, 10, 0, 10)
 #' patchSize = 500
 #'
 #' ## Make a patch and introduce a single tone cell
@@ -28,7 +29,7 @@ rmSingle <- function(rst, rm = TRUE){
   dim1 <- dim(rst)[1]
   dim2 <- dim(rst)[2]
   singles <- vector()
-  v <- vval <- raster::getValues(rst)
+  v <- vval <- terra::values(rst)
   v <- which(is.finite(v))
   for (pt in v){  ## Faster than sapply or vapply!
     if(pt %% dim2 == 0){
@@ -51,7 +52,7 @@ rmSingle <- function(rst, rm = TRUE){
     }
   }
   if(rm == TRUE){
-    rst[] <- vval
+    terra::values(rst) <- vval
     return(rst)
   } else {
     return(singles)

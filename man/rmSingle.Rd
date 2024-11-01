@@ -21,9 +21,10 @@ This function reduces the "salt-pepper" effect, identifying or correcting those 
 % ADD FUNCTIONALITY NOT ONLY SINGLES BUT USER DEFINED SIZE
 }
 \examples{
-library(raster)
+library(terra)
 m = matrix(0, 33, 33)
-r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+r = rast(m)
+ext(r) = c(0, 10, 0, 10)
 patchSize = 500
 
 ## Make a patch and introduce a single tone cell

@@ -1,19 +1,19 @@
 #' Create a class of patches.
 #'
 #' @inheritParams makePatch
-#' @param context Raster object, a raster of an empty landscape or a mask, indicating where the patch cannot be generated (see \code{bgr} argument).
+#' @param context SpatRaster object, a raster of an empty landscape or a mask, indicating where the patch cannot be generated (see \code{bgr} argument).
 #' @param npatch number of patches per class
 #' @param size integer. The size of patches, as number of raster cells. A single integer can be provided, in which case all patches will have that size.
 #' @param pts integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indexes of the cells in the raster, or a two columns matrix indicating x and y coordinates.
-#' @return A RasterLayer object, or a vector of cell numbers  if \code{rast=FALSE}.
+#' @return A SpatRaster object, or a vector of cell numbers  if \code{rast=FALSE}.
 #' @details The patches created can be contiguous, therefore resembling a single patch with size
 #' equal to the sum of contiguous cells. The patches are created starting from the seed points (if provided) and iteratively sampling randomly neighbouring cells at the edge of the patch, according to von Neumann neighbourhood (four cells, aka Rook case).
 #' There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
 #' @examples
-#' library(raster)
-#'
-#' m = matrix(0, 33, 33)
-#' r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+#' library(terra)
+#' mtx = matrix(0, 33, 33)
+#' r = rast(mtx)
+#' ext(r) = c(0, 10, 0, 10)
 #' num = 5
 #' size = 15
 #' rr = makeClass(r, num, size)
@@ -27,19 +27,27 @@
 #' @export
 makeClass <- function(context, npatch, size, pts = NULL, bgr=0, edge=FALSE, rast=TRUE, val=1){
   if(length(npatch) != 1){ stop('A single integer value must be provided to argument "npatch"') }
-  if(length(val) > 1){ stop('A single value only is admitted for "val" argument.') }
-  if(val %in% bgr){ warning('Value to attribute to patches same as background cells value (arg. "val" equals "bgr").') }
+  if(length(val) > 1 && length(val) != npatch){ stop('The "val" argument must either be of length 1 or npatch.') }
+  if(any(val %in% bgr)){ warning('Value to attribute to patches same as background cells value (arg. "val" equals "bgr").') }
   if(length(size) != npatch & length(size) > 1){ stop('Number of patches not matching the length of size vector') }
   if(any(is.na(size) | size <=0)){ stop('Invalid "size" argument provided.') }
-  if(npatch <= 0 | npatch > length(context) | is.na(npatch)) { stop('Invalid number of patches required (e.g. more than available landscape cells). Check argument "npatch".') }
+  if(npatch <= 0 | npatch > terra::ncell(context) | is.na(npatch)) { stop('Invalid number of patches required (e.g. more than available landscape cells). Check argument "npatch".') }
   if(rast==TRUE & edge==TRUE){
     edge=FALSE
     warning('Edge output reset to FALSE. edge=TRUE only when raster output is not required (i.e. rast=FALSE)')
   }
-  mtx <- t(raster::as.matrix(context))
+  #----- LEM: the as.numeric is required for type matching in Rcpp -----------#
+  mtx <- terra::as.matrix(context, wide=T)
+  mtx <- t(matrix(as.numeric(mtx), ncol=ncol(mtx), nrow=nrow(mtx)))
   if(length(size)==1){
     size <- rep(size, npatch)
   }
+
+  #----- LEM: If val is single, expand to npatch -----------------------------#
+  if (length(val) == 1) {
+    val = rep(val, npatch)
+  }
+
   bgrCells <- which(is.element(mtx, bgr))
   if(length(bgrCells) == 0){
     stop('No background cells available with value ', bgr, '. Try checking argument "bgr".')
@@ -68,7 +76,7 @@ makeClass <- function(context, npatch, size, pts = NULL, bgr=0, edge=FALSE, rast
   }
   lst <- list()
   for(np in 1:npatch){
-    l <- makePatch(context=mtx, spt=pts[np], size=size[np], bgr=bgr, edge=edge, val=val, rast = FALSE)
+    l <- makePatch(context=mtx, spt=pts[np], size=size[np], bgr=bgr, edge=edge, val=val[np], rast = FALSE)
     if(edge==TRUE){
       eg <- l[[2]]
       l <- l[[1]]
@@ -76,10 +84,12 @@ makeClass <- function(context, npatch, size, pts = NULL, bgr=0, edge=FALSE, rast
     } else {
       lst[[np]] <- l
     }
-    .assignValues(val, l, mtx) #mtx[l] <- val
+    .assignValues(val[np], l, mtx) #mtx[l] <- val
   }
   if(rast == TRUE) {
-    context[unlist(lst)] <- val
+    for(np in 1:npatch){
+      context[unlist(lst[[np]])] <- val[np]
+    }
     return(context)
   } else {
     return(lst)

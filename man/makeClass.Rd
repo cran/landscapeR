@@ -4,11 +4,19 @@
 \alias{makeClass}
 \title{Create a class of patches.}
 \usage{
-makeClass(context, npatch, size, pts = NULL, bgr = 0, edge = FALSE,
-  rast = TRUE, val = 1)
+makeClass(
+  context,
+  npatch,
+  size,
+  pts = NULL,
+  bgr = 0,
+  edge = FALSE,
+  rast = TRUE,
+  val = 1
+)
 }
 \arguments{
-\item{context}{Raster object, a raster of an empty landscape or a mask, indicating where the patch cannot be generated (see \code{bgr} argument).}
+\item{context}{SpatRaster object, a raster of an empty landscape or a mask, indicating where the patch cannot be generated (see \code{bgr} argument).}
 
 \item{npatch}{number of patches per class}
 
@@ -20,12 +28,12 @@ makeClass(context, npatch, size, pts = NULL, bgr = 0, edge = FALSE,
 
 \item{edge}{logical. Should the vector of edge cells of the patch be returned?}
 
-\item{rast}{logical. If TRUE returns a Raster object, otherwise a vector of cell numbers where the patch occurs}
+\item{rast}{logical. If TRUE returns a SpatRaster object, otherwise a vector of cell numbers where the patch occurs}
 
 \item{val}{integer. The value to be assigned to patch cells, when \code{rast=TRUE}}
 }
 \value{
-A RasterLayer object, or a vector of cell numbers  if \code{rast=FALSE}.
+A SpatRaster object, or a vector of cell numbers  if \code{rast=FALSE}.
 }
 \description{
 Create a class of patches.
@@ -36,10 +44,10 @@ equal to the sum of contiguous cells. The patches are created starting from the 
 There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
 }
 \examples{
-library(raster)
-
-m = matrix(0, 33, 33)
-r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+library(terra)
+mtx = matrix(0, 33, 33)
+r = rast(mtx)
+ext(r) = c(0, 10, 0, 10)
 num = 5
 size = 15
 rr = makeClass(r, num, size)

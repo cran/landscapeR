@@ -4,11 +4,20 @@
 \alias{makeLine}
 \title{Create a linear patch (beta version).}
 \usage{
-makeLine(context, size, direction = NULL, convol = 0.5, spt = NULL,
-  bgr = 0, edge = FALSE, rast = FALSE, val = 1)
+makeLine(
+  context,
+  size,
+  direction = NULL,
+  convol = 0.5,
+  spt = NULL,
+  bgr = 0,
+  edge = FALSE,
+  rast = FALSE,
+  val = 1
+)
 }
 \arguments{
-\item{context}{Raster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
+\item{context}{SpatRaster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
 
 \item{size}{integer. Size of the patch to be generated, as number of raster cells.}
 
@@ -23,12 +32,12 @@ between 0 and 1, where 0 is no convolution at all (basically a straight line) an
 
 \item{edge}{logical. Should the vector of edge cells of the patch be returned?}
 
-\item{rast}{logical. If TRUE returns a Raster object, otherwise a vector of cell numbers where the patch occurs}
+\item{rast}{logical. If TRUE returns a SpatRaster object, otherwise a vector of cell numbers where the patch occurs}
 
 \item{val}{integer. The value to be assigned to patch cells, when \code{rast=TRUE}}
 }
 \value{
-A vector of raster cell numbers, or a RasterLayer object if \code{rast=TRUE}. If \code{edge=TRUE} a
+A vector of raster cell numbers, or a SpatRaster object if \code{rast=TRUE}. If \code{edge=TRUE} a
 list of two vectors is returned: one for the inner raster cells and the second for cells at the edge of the patch.
 }
 \description{
@@ -43,9 +52,10 @@ For any values of \code{convol} > 0.8, no big differences are observed noted. Al
 as convolution increases.
 }
 \examples{
-library(raster)
+library(terra)
 r <- matrix(0,33,33)
-r <- raster(r, xmn=0, xmx=10, ymn=0, ymx=10)
+r <- rast(r)
+ext(r) = c(0, 10, 0, 10)
 plot(makeLine(r, size=50, spt = 545, direction=45, convol=0.05, rast=TRUE))
 
 }

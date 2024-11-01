@@ -1,33 +1,35 @@
 #' Create a single patch
 #'
 #' @description Function will create a single patch. \strong{NOTE}: \code{makeClass} should be used preferably when creating a single patch, as better error and exception handling is provided.
-#' @param context Raster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).
+#' @param context SpatRaster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).
 #' @param size integer. Size of the patch to be generated, as number of raster cells.
 #' @param spt integer or matrix. The seed point location around which the patch is generated (a random point is given by default). It can be an integer, as index of the cell in the raster, or a two columns matrix indicating x and y coordinates (an integer vector of length 2 is accepted too).
 #' @param bgr integer. A single value of background cells, where a patch can be generated (default is zero). Cells/classes which cannot be changed must have a different value.
 #' @param edge logical. Should the vector of edge cells of the patch be returned?
-#' @param rast logical. If TRUE returns a Raster object, otherwise a vector of cell numbers where the patch occurs
+#' @param rast logical. If TRUE returns a SpatRaster object, otherwise a vector of cell numbers where the patch occurs
 #' @param val integer. The value to be assigned to patch cells, when \code{rast=TRUE}
-#' @return A vector of raster cell numbers, or a RasterLayer object if \code{rast=TRUE}. If \code{edge=TRUE} a
+#' @return A vector of raster cell numbers, or a SpatRaster object if \code{rast=TRUE}. If \code{edge=TRUE} a
 #' list of two vectors is returned: one for the inner raster cells and the second for cells at the edge of the patch.
 #' @details The patch is created starting from the seed point and iteratively sampling randomly neighbouring cells at the edge of the patch, according to von Neumann neighbourhood (four cells, aka Rook case).
 #' There is a tolerance of +/- 3 cells from the patch size declared in \code{size} argument.
 #' Argument \code{bgr} accepts a single value only, unlike \code{makeClass} that accepts multiple and should therefore preferred.
 #' @examples
-#' library(raster)
+#' library(terra)
 #' mtx = matrix(0, 33, 33)
-#' r = raster(mtx, xmn=0, xmx=10, ymn=0, ymx=10)
+#' r = rast(mtx)
+#' ext(r) = c(0, 10, 0, 10)
 #' patchSize = 500
 #' rr = makePatch(r, patchSize, rast=TRUE)
 #' plot(rr)
 #'
 #' ## Create a patch with value 3, starting from the centre cell
 #' mtx = matrix(0, 33, 33)
-#' r = raster(mtx, xmn=0, xmx=10, ymn=0, ymx=10)
+#' r = rast(mtx)
+#' ext(r) = c(0, 10, 0, 10)
 #' newVal = 3
 #' centre = 545
 #' cells = makePatch(r, patchSize, centre)
-#' r[cells] = newVal
+#' values(r) = newVal
 #' plot(r)
 #'
 #' ## Now create a new patch with value 10 and size 100 inside the existing patch
@@ -42,7 +44,9 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
       }
       spt <- .toCellIndex(context, spt)
     }
-    mtx <- t(raster::as.matrix(context))
+    #----- LEM: the as.numeric is required for type matching in Rcpp ---------#
+    mtx <- terra::as.matrix(context, wide=T)
+    mtx <- t(matrix(as.numeric(mtx), ncol=ncol(mtx), nrow=nrow(mtx)))
     warningSwitch <- TRUE
   } else {
     mtx <- context
@@ -58,7 +62,7 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
   if(is.null(spt)){
     spt <- sample(bgrCells, 1)
   }
-  if(spt > length(context) | spt < 1 | spt %% 1 != 0){
+  if(spt > terra::ncell(context) | spt < 1 | spt %% 1 != 0){
     stop('Seed point not valid. Must be an integer between 1 and the total number of cells of "context".')
   }
   if(.subset(mtx, spt) != bgr){ #mtx[spt] != bgr
@@ -74,7 +78,7 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
   }
   .assignValues(val, spt, mtx) #mtx[spt] <- val
   edg <- spt
-  cg = 1
+  cg <- 1
   while(cg < size){
     ad <- .contigCells(spt, bgr, mtx)
     if(length(ad) == 0) {
@@ -97,7 +101,7 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
     #Rcpp::checkUserInterrupt()
   }
   if(rast == TRUE) {
-    context[] <- t(mtx)
+    terra::values(context) <- t(mtx)
     return(context)
   } else if (edge == TRUE) {
     if(val+1 == bgr){
@@ -121,7 +125,7 @@ makePatch <- function(context, size, spt=NULL, bgr=0, edge=FALSE, rast=FALSE, va
   } else if(is.matrix(rast)){
     stop('Cannot use spatial coordinates on a matrix. Please provide a raster or a vector of cell indexes.')
   } else {
-    raster::cellFromXY(rast, coord)
+    terra::cellFromXY(rast, coord)
   }
 }
 

@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 .contigCells <- function(pt, bgr, mtx) {
-    .Call('landscapeR_contigCells_cpp', PACKAGE = 'landscapeR', pt, bgr, mtx)
+    .Call('_landscapeR_contigCells_cpp', PACKAGE = 'landscapeR', pt, bgr, mtx)
 }
 
 .assignValues <- function(val, ad, mtx) {
-    .Call('landscapeR_assignValues_cpp', PACKAGE = 'landscapeR', val, ad, mtx)
+    .Call('_landscapeR_assignValues_cpp', PACKAGE = 'landscapeR', val, ad, mtx)
 }
 
 .indexTranspose <- function(id, dim1, dim2) {
-    .Call('landscapeR_indexTranspose_cpp', PACKAGE = 'landscapeR', id, dim1, dim2)
+    .Call('_landscapeR_indexTranspose_cpp', PACKAGE = 'landscapeR', id, dim1, dim2)
 }
 

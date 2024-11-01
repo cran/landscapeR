@@ -7,7 +7,7 @@
 expandClass(context, class, size, bgr = 0, pts = NULL)
 }
 \arguments{
-\item{context}{Raster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
+\item{context}{SpatRaster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
 
 \item{class}{The raster value of class (or patch) to expand.}
 
@@ -18,16 +18,17 @@ expandClass(context, class, size, bgr = 0, pts = NULL)
 \item{pts}{integer or matrix. The seed point location around which the patches are built (random points are given by default). It can be an integer, as indexes of the cells in the raster, or a two columns matrix indicating x and y coordinates.}
 }
 \value{
-A RasterLayer object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.
+A SpatRaster object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.
 }
 \description{
 Expand an existing class of patches.
 }
 \examples{
-library(raster)
+library(terra)
 
 m = matrix(0, 33, 33)
-r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+r = rast(m)
+ext(r) = c(0, 10, 0, 10)
 r = makeClass(r, 5, 10)
 plot(r)
 
@@ -36,7 +37,8 @@ plot(rr)
 
 ## This function can be used to mimic shapes, by providing a skeleton:
 m[,17] = 1
-r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+r = rast(m)
+ext(r) = c(0, 10, 0, 10)
 plot(r)
 
 rr = expandClass(r, 1, 100)

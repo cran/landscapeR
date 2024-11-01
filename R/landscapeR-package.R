@@ -21,8 +21,7 @@
 #' }
 #' @details Check out the vignette illustrating the use of landscapeR.\cr
 #' Also: \url{https://github.com/dariomasante/landscapeR}
-#' @docType package
 #' @name landscapeR-package
 #' @aliases landscapeR
-#' @author Dario Masante
+#' @author Dario Masante [aut, cre], Lora Murphy [ctb]
 NULL

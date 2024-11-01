@@ -5,9 +5,14 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // contigCells_cpp
 IntegerVector contigCells_cpp(int pt, int bgr, NumericMatrix mtx);
-RcppExport SEXP landscapeR_contigCells_cpp(SEXP ptSEXP, SEXP bgrSEXP, SEXP mtxSEXP) {
+RcppExport SEXP _landscapeR_contigCells_cpp(SEXP ptSEXP, SEXP bgrSEXP, SEXP mtxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +25,7 @@ END_RCPP
 }
 // assignValues_cpp
 NumericMatrix assignValues_cpp(int val, IntegerVector ad, NumericMatrix mtx);
-RcppExport SEXP landscapeR_assignValues_cpp(SEXP valSEXP, SEXP adSEXP, SEXP mtxSEXP) {
+RcppExport SEXP _landscapeR_assignValues_cpp(SEXP valSEXP, SEXP adSEXP, SEXP mtxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,7 +38,7 @@ END_RCPP
 }
 // indexTranspose_cpp
 IntegerVector indexTranspose_cpp(IntegerVector id, int dim1, int dim2);
-RcppExport SEXP landscapeR_indexTranspose_cpp(SEXP idSEXP, SEXP dim1SEXP, SEXP dim2SEXP) {
+RcppExport SEXP _landscapeR_indexTranspose_cpp(SEXP idSEXP, SEXP dim1SEXP, SEXP dim2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -43,4 +48,16 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(indexTranspose_cpp(id, dim1, dim2));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_landscapeR_contigCells_cpp", (DL_FUNC) &_landscapeR_contigCells_cpp, 3},
+    {"_landscapeR_assignValues_cpp", (DL_FUNC) &_landscapeR_assignValues_cpp, 3},
+    {"_landscapeR_indexTranspose_cpp", (DL_FUNC) &_landscapeR_indexTranspose_cpp, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_landscapeR(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

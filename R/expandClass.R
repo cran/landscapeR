@@ -5,12 +5,13 @@
 #' @param class The raster value of class (or patch) to expand.
 #' @param size integer. Size of expansion, as number of raster cells.
 #' @param bgr integer. The background available where expansion is allowed (i.e. shrinking classes).
-#' @return A RasterLayer object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.
+#' @return A SpatRaster object. If \code{rast=FALSE} returns a list of vectors, each containing the \code{context} cells assigned to each patch.
 #' @examples
-#' library(raster)
+#' library(terra)
 #'
 #' m = matrix(0, 33, 33)
-#' r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+#' r = rast(m)
+#' ext(r) = c(0, 10, 0, 10)
 #' r = makeClass(r, 5, 10)
 #' plot(r)
 #'
@@ -19,7 +20,8 @@
 #'
 #' ## This function can be used to mimic shapes, by providing a skeleton:
 #' m[,17] = 1
-#' r = raster(m, xmn=0, xmx=10, ymn=0, ymx=10)
+#' r = rast(m)
+#' ext(r) = c(0, 10, 0, 10)
 #' plot(r)
 #'
 #' rr = expandClass(r, 1, 100)
@@ -29,10 +31,14 @@ expandClass <- function(context, class, size, bgr=0, pts = NULL) {
   if(length(class) > 1){ stop('A single value only is admitted for "class" argument.') }
   if(class %in% bgr){ warning('Value to attribute to patches same as background cells value (arg. "class" equals "bgr").') }
   if(any(is.na(size) | size <=0)){ stop('Invalid "size" argument provided.') }
-  bd <- raster::boundaries(context, type='outer', classes=TRUE, directions=8)
-  bd <- t(raster::as.matrix(bd))
+  bd <- terra::boundaries(context, inner=FALSE, classes=TRUE, directions=8)
+  #----- LEM: the as.numeric is required for type matching in Rcpp -----------#
+  bd <- terra::as.matrix(bd, wide=T)
+  bd <- t(matrix(as.numeric(bd), ncol=ncol(bd), nrow=nrow(bd)))
   if(!is.matrix(context)) {
-    mtx <- t(raster::as.matrix(context))
+    #----- LEM: the as.numeric is required for type matching in Rcpp ---------#
+    mtx <- terra::as.matrix(context, wide=T)
+    mtx <- t(matrix(as.numeric(mtx), ncol=ncol(mtx), nrow=nrow(mtx)))
   } else {
     mtx <- context
   }
@@ -90,6 +96,6 @@ expandClass <- function(context, class, size, bgr=0, pts = NULL) {
 #    mtx[p_bgr[id]] <- vals[id]
     mtx[.subset(p_bgr, id)] <- .subset(vals, id)
   }
-  context[] <- t(mtx)
+  terra::values(context) <- t(mtx)
   return(context)
 }

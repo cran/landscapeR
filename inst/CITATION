@@ -1,0 +1,15 @@
+citHeader("To cite landscapeR in publications use:")
+
+bibentry(
+  bibtype = "Article",
+  title        = "Fragmentation and thresholds in hydrological flow-based ecosystem services.",
+  author       = c("Thomas Amy, Masante Dario, Jackson Bethanna, Cosby Bernard, Emmett Bridget, Jones Laurence"),
+  journal      = "Ecological Applications",
+  year         = "2020",
+  url          = "https://doi.org/10.1002/eap.2046",
+  textVersion  =
+      paste("Thomas, A., Masante, D., Jackson, B., Cosby, B., Emmett, B., Jones, L. (2020).",
+            "Fragmentation and thresholds in hydrological flow-based ecosystem services.",
+            "Ecological Applications.",
+            "URL  https://doi.org/10.1002/eap.2046")
+)

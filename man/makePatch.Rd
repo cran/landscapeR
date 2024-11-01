@@ -4,11 +4,18 @@
 \alias{makePatch}
 \title{Create a single patch}
 \usage{
-makePatch(context, size, spt = NULL, bgr = 0, edge = FALSE,
-  rast = FALSE, val = 1)
+makePatch(
+  context,
+  size,
+  spt = NULL,
+  bgr = 0,
+  edge = FALSE,
+  rast = FALSE,
+  val = 1
+)
 }
 \arguments{
-\item{context}{Raster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
+\item{context}{SpatRaster object or matrix, an empty landscape raster or a mask indicating where the patch cannot be generated (see bgr below).}
 
 \item{size}{integer. Size of the patch to be generated, as number of raster cells.}
 
@@ -18,12 +25,12 @@ makePatch(context, size, spt = NULL, bgr = 0, edge = FALSE,
 
 \item{edge}{logical. Should the vector of edge cells of the patch be returned?}
 
-\item{rast}{logical. If TRUE returns a Raster object, otherwise a vector of cell numbers where the patch occurs}
+\item{rast}{logical. If TRUE returns a SpatRaster object, otherwise a vector of cell numbers where the patch occurs}
 
 \item{val}{integer. The value to be assigned to patch cells, when \code{rast=TRUE}}
 }
 \value{
-A vector of raster cell numbers, or a RasterLayer object if \code{rast=TRUE}. If \code{edge=TRUE} a
+A vector of raster cell numbers, or a SpatRaster object if \code{rast=TRUE}. If \code{edge=TRUE} a
 list of two vectors is returned: one for the inner raster cells and the second for cells at the edge of the patch.
 }
 \description{
@@ -35,20 +42,22 @@ There is a tolerance of +/- 3 cells from the patch size declared in \code{size} 
 Argument \code{bgr} accepts a single value only, unlike \code{makeClass} that accepts multiple and should therefore preferred.
 }
 \examples{
-library(raster)
+library(terra)
 mtx = matrix(0, 33, 33)
-r = raster(mtx, xmn=0, xmx=10, ymn=0, ymx=10)
+r = rast(mtx)
+ext(r) = c(0, 10, 0, 10)
 patchSize = 500
 rr = makePatch(r, patchSize, rast=TRUE)
 plot(rr)
 
 ## Create a patch with value 3, starting from the centre cell
 mtx = matrix(0, 33, 33)
-r = raster(mtx, xmn=0, xmx=10, ymn=0, ymx=10)
+r = rast(mtx)
+ext(r) = c(0, 10, 0, 10)
 newVal = 3
 centre = 545
 cells = makePatch(r, patchSize, centre)
-r[cells] = newVal
+values(r) = newVal
 plot(r)
 
 ## Now create a new patch with value 10 and size 100 inside the existing patch
