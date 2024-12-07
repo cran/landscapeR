@@ -1,3 +1,8 @@
+landscapeR v1.3.1 (Release date: 2024-12-08)
+-----------------------------------------------
+CHANGES:
+* minor fix in tutorial
+
 landscapeR v1.3 (Release date: 2024-10-31)
 -----------------------------------------------
 CHANGES:

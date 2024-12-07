@@ -1,8 +1,8 @@
 Package: landscapeR
 Type: Package
 Title: Categorical Landscape Simulation Facility
-Version: 1.3
-Date: 2024-10-31
+Version: 1.3.1
+Date: 2024-12-08
 Authors@R: c(person(given = "Dario", family = "Masante", role = c("aut", "cre"), email = "dario.masante@gmail.com"), person(given="Lora", family="Murphy", role="ctb", email="murphyl@caryinstitute.org"))
 Maintainer: Dario Masante <dario.masante@gmail.com>
 Copyright: Natural Environment Research Council (NERC) and Centre for
@@ -18,8 +18,8 @@ LinkingTo: Rcpp
 RoxygenNote: 7.3.2
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2024-11-01 20:18:02 UTC; masante
+Packaged: 2024-12-07 17:30:47 UTC; masante
 Author: Dario Masante [aut, cre],
   Lora Murphy [ctb]
 Repository: CRAN
-Date/Publication: 2024-11-01 21:10:02 UTC
+Date/Publication: 2024-12-07 17:50:02 UTC

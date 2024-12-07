@@ -13,14 +13,11 @@ vignette: |
   %\VignetteDepends{terra}
 ---
 
-Package landscapeR contains a set of functions to simulate categorical landscapes on actual geographical realms, starting from either empty landscapes or landscapes provided by the user (e.g. land use maps). The purpose is to provide a tool to tweak or create the landscape while retaining a high degree of control on its features, without the hassle of specifying each location attribute. In this it differs from other tools which generate null or neutral landscape in a theorethical space. 
+Package landscapeR contains a set of functions to simulate categorical landscapes on actual geographical realms, starting from either empty landscapes or landscapes provided by the user (e.g. land use maps). The purpose is to provide a tool to tweak or create the landscape while retaining a high degree of control on its features, without the hassle of specifying each location attribute. In this it differs from other tools which generate null or neutral landscape in a theoretical space. 
 
 Input and outputs are raster datasets or R integer vectors indicating the raster cell indexes. Cell indexes always range from 1 to the number of cells composing the raster, including missing values (i.e. the number of columns times number of rows), and are assigned from left to right and top to bottom. 
-In landscapeR, areas are measured by number of raster cells, rather than actual areas. Therefore, areas (and dimensions) of cells within a raster are always treated as equal, as the package is conceived to work on landscapes from fine to mid scale, where differences in cell areas due to latitude are relatively small. This may be an issue when working with non projected data at very wide scale (e.g. from subcontinental to global). All basic GIS operations are handled by the [`raster`](https://cran.r-project.org/package=raster) package. Please cite as:
-Thomas A., Masante D., Jackson B., Cosby B., Emmett B., Jones L. (2020). Fragmentation and thresholds in hydrological flow-based ecosystem services. Ecological Applications. https://doi.org/10.1002/eap.2046
-
-### Update:
-This version of the package now uses the [`terra`](https://cran.r-project.org/package=terra) package. The raster package is now deprecated and the port to a new version was not completed by the original author. The listed maintainer OF THIS VERSION of this package is the one who completed the port, and left the above text in for documentation completeness.
+In landscapeR, areas are measured by number of raster cells, rather than actual areas. Therefore, areas (and dimensions) of cells within a raster are always treated as equal, as the package is conceived to work on landscapes from fine to mid scale, where differences in cell areas due to latitude are relatively small. This may be an issue when working with non projected data at very wide scale (e.g. from subcontinental to global). All basic GIS operations are handled by the [`terra`](https://cran.r-project.org/package=terra) package. 
+Please cite as: Thomas A., Masante D., Jackson B., Cosby B., Emmett B., Jones L. (2020). Fragmentation and thresholds in hydrological flow-based ecosystem services. Ecological Applications. https://doi.org/10.1002/eap.2046
 
 Below it follows a set of examples, using landscapeR functions to generate various landscape configurations. Let's start loading the required packages and making an empty landscape (by transforming a matrix into a raster a geographical object of class RasterLayer):
 

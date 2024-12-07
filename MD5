@@ -1,6 +1,6 @@
-ec18e2ccb5dd767ede9dd4667618c269 *DESCRIPTION
+bcbfd2aa8921530cdec0f54a2a5dc992 *DESCRIPTION
 8cb35e234ffdef13f971f80f618992d6 *NAMESPACE
-4057d20c5d9ee89b2d4ea419eaba577e *NEWS.md
+161a0dddadf195724a1276a051432701 *NEWS.md
 a4ab04b34a6d2113834a96da10f06bb1 *R/RcppExports.R
 168ca0ccf582456039467371f1e83157 *R/expandClass.R
 b9d53aa85ad2c547d7c52f4a9f34b059 *R/landscapeR-package.R
@@ -13,8 +13,8 @@ d8f455396216d93c4566d2e7d27c79c0 *build/vignette.rds
 62583f9b09873cae8b1462ab7a194b29 *inst/CITATION
 6fbe40d2a4c543685ea49b7d68d82b2c *inst/COPYRIGHTS
 252f0946024f3bbf733966c6d6491bc3 *inst/doc/landscapeR.R
-c83a1bf9c22389834a2386e938d7ca95 *inst/doc/landscapeR.Rmd
-d87cbd9624b2bb5e3b896320761a9e41 *inst/doc/landscapeR.html
+14dbbbd58fd6fa9b60e7fa7963a3796a *inst/doc/landscapeR.Rmd
+4ebdef227daab3de0ff1844862dfdf03 *inst/doc/landscapeR.html
 cf0295d2d592fbc5ed8a1af87bd955ea *man/expandClass.Rd
 d6702d535b78103d3d2fc871b5f141c5 *man/landscapeR-package.Rd
 82cf92f26f6a6c7647c1fab4cf6e7e69 *man/makeClass.Rd
@@ -23,7 +23,7 @@ d6702d535b78103d3d2fc871b5f141c5 *man/landscapeR-package.Rd
 b517983d400497707a97cf95e66a5105 *man/rmSingle.Rd
 e54b43411f0dfd289205a84ef2f54ad3 *src/RcppExports.cpp
 a75ee32e13bfc69ed50076851d2c5806 *src/hidden.cpp
-c83a1bf9c22389834a2386e938d7ca95 *vignettes/landscapeR.Rmd
+14dbbbd58fd6fa9b60e7fa7963a3796a *vignettes/landscapeR.Rmd
 313c6f0599ccc474c1b06e1276c59212 *vignettes/unnamed-chunk-10-1.png
 0a5c0fbb64c8ea2043ddf75aa03520ec *vignettes/unnamed-chunk-11-1.png
 19c27aee4ba9df1340a5b8d513336db2 *vignettes/unnamed-chunk-12-1.png
